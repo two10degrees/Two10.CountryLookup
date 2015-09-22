@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Two10.CountryLookup
 {
@@ -49,7 +48,6 @@ namespace Two10.CountryLookup
         {
             foreach (var line in geojson)
             {
-            
                 foreach (var polygon in GeoJsonParser.Convert(line))
                 {
                     yield return new Country
@@ -59,14 +57,13 @@ namespace Two10.CountryLookup
                         Polygon = polygon.Geometry
                     };
                 }
-          
             }
         }
 
         static IEnumerable<string> LoadFile()
         {
             string line = null;
-            using (var file = new System.IO.StreamReader("country-list.json"))
+            using (var file = new StreamReader("country-list.json"))
             {
                 while ((line = file.ReadLine()) != null)
                 {
@@ -77,6 +74,4 @@ namespace Two10.CountryLookup
 
 
     }
-
-
 }
