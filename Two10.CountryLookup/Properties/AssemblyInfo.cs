@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("Two10.CountryLookup")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Lookup a country by lat/lng coordinates")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("two10degrees")]
 [assembly: AssemblyProduct("Two10.CountryLookup")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
