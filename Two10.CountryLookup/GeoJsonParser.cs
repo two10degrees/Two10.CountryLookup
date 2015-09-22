@@ -15,8 +15,6 @@ namespace Two10.CountryLookup
             public string Id { get; set; }
             public IDictionary<string, string> Properties { get; set; }
             public float[][] Geometry { get; set; }
-    
-
         }
 
         public static IEnumerable<ParsedGeoJson> Convert(string json)
@@ -44,7 +42,6 @@ namespace Two10.CountryLookup
             if (null == geometry) yield break;
             switch ((string)geometry.type)
             {
-        
                 case "Polygon":
                     yield return (ParseCoordinates((dynamic) geometry.coordinates[0]) as IEnumerable<float[]>).ToArray();
                     break;
