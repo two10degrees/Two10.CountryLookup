@@ -9,29 +9,12 @@ namespace Two10.CountryLookup
     public class ReverseLookup
     {
 
-        /*
-  point_in_polygon = function(polygon, point) {
-var nvert = polygon.length;
-var c = false;
-var i = 0;
-var j = 0;
-for(i = 0, j = nvert-1; i < nvert; j = i++) {
-if( ((polygon[i][1] > point[1]) != (polygon[j][1] > point[1])) && 
- (point[0] < (polygon[j][0] - polygon[i][0]) * (point[1] - polygon[i][1]) / (polygon[j][1] - polygon[i][1]) + polygon[i][0]) ) {
-c = !c;
-}
-}
-return c;
-};
-*/
-
         public Country[] Countries { get; private set; }
 
         public ReverseLookup()
         {
             this.Countries = ParseInput(LoadFile()).ToArray();
         }
-
 
         static bool InPolygon(float[] point, float[][] polygon)
         {
@@ -95,12 +78,5 @@ return c;
 
     }
 
-    public class Country
-    {
-        public string Name { get; set; }
-        public string Code { get; set; }
-
-        public float[][] Polygon { get; set; }
-    }
 
 }
