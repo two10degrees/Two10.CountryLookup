@@ -51,9 +51,7 @@
     <Compile Include="GeoJsonParser.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="country-list.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="country-list.json" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

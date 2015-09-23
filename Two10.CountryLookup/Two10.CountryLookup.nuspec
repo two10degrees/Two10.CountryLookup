@@ -15,7 +15,4 @@
     <copyright>Copyright 2015</copyright>
     <tags>country lookup latitude longitude coordinates</tags>
   </metadata>
-  <files>
-    <file src="country-list.json" target="lib" />
-  </files>    
 </package>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace Two10.CountryLookup
 {
@@ -62,10 +63,12 @@ namespace Two10.CountryLookup
 
         static IEnumerable<string> LoadFile()
         {
-            string line = null;
-            using (var file = new StreamReader("country-list.json"))
+            var assembly = Assembly.GetExecutingAssembly();
+            using (var stream = assembly.GetManifestResourceStream(assembly.GetManifestResourceNames().First()))
+            using (var reader = new StreamReader(stream))
             {
-                while ((line = file.ReadLine()) != null)
+                string line = null;
+                while ((line = reader.ReadLine()) != null)
                 {
                     yield return line;
                 }
