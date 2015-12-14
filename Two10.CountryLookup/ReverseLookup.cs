@@ -9,11 +9,11 @@ namespace Two10.CountryLookup
     public class ReverseLookup
     {
 
-        public Country[] Countries { get; private set; }
+        public Region[] Regions { get; private set; }
 
         public ReverseLookup()
         {
-            this.Countries = ParseInput(LoadFile()).ToArray();
+            this.Regions = ParseInput(LoadFile()).ToArray();
         }
 
         static bool InPolygon(float[] point, float[][] polygon)
@@ -32,10 +32,24 @@ namespace Two10.CountryLookup
             return c;
         }
 
-        public Country Lookup(float lat, float lng)
+        /// <summary>
+        /// Looks up regions which the provided lat/lng fall inside
+        /// </summary>
+        /// <param name="lat">latitude</param>
+        /// <param name="lng">longitude</param>
+        /// <param name="types">optional region types to search. Defaults to all (land and sea)</param>
+        /// <returns></returns>
+        public Region Lookup(float lat, float lng, params RegionType[] types)
         {
             var coords = new float[] { lng, lat };
-            foreach (var country in this.Countries)
+            var subset = this.Regions as IEnumerable<Region>;
+
+            if (types.Any())
+            {
+                subset = subset.Where(x => types.Any(y => y == x.Type));
+            }
+
+            foreach (var country in subset)
             {
                 if (InPolygon(coords, country.Polygon))
                 {
@@ -45,15 +59,16 @@ namespace Two10.CountryLookup
             return null;
         }
 
-        static IEnumerable<Country> ParseInput(IEnumerable<string> geojson)
+        static IEnumerable<Region> ParseInput(IEnumerable<string> geojson)
         {
             foreach (var line in geojson)
             {
                 foreach (var polygon in GeoJsonParser.Convert(line))
                 {
-                    yield return new Country
+                    yield return new Region
                     {
                         Name = polygon.Properties["name"],
+                        Type = polygon.Properties["type"] == "country" ? RegionType.Country : RegionType.Ocean,
                         Code = polygon.Id,
                         Polygon = polygon.Geometry
                     };
