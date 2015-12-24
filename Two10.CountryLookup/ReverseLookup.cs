@@ -78,6 +78,8 @@ namespace Two10.CountryLookup
 
         static IEnumerable<string> LoadFile()
         {
+            // The whole file is not being deserialized to not waste memory unnecessarily.
+            // Deserializing each line separately should consume less resources.
             var assembly = Assembly.GetExecutingAssembly();
             using (var stream = assembly.GetManifestResourceStream(assembly.GetManifestResourceNames().First()))
             using (var reader = new StreamReader(stream))
@@ -85,11 +87,17 @@ namespace Two10.CountryLookup
                 string line = null;
                 while ((line = reader.ReadLine()) != null)
                 {
+                    // Skip root json object (first and last lines)
+                    if (line.Length < 100)
+                        continue;
+
+                    // Remove trailing commas that make file geojson compatible
+                    if (line[line.Length - 1] == ',')
+                        line = line.Remove(line.Length - 1, 1);
+
                     yield return line;
                 }
             }
         }
-
-
     }
 }

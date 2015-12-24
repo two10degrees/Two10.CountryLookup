@@ -51,7 +51,7 @@
     <Compile Include="GeoJsonParser.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="region-list.json" />
+    <EmbeddedResource Include="region-list.geojson" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
