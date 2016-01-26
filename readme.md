@@ -1,5 +1,7 @@
 # Two10.CountryLookup
 
+[![Build status](https://ci.appveyor.com/api/projects/status/jufukg89x92nh5v2?svg=true)](https://ci.appveyor.com/project/richorama/two10-countrylookup)
+
 ## Installation
 
 ```
