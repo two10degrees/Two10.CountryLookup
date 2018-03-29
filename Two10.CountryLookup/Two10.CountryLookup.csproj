@@ -31,9 +31,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -45,10 +44,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Region.cs" />
+    <Compile Include="Services\FileLoader.cs" />
+    <Compile Include="Abstractions\IFileLoader.cs" />
+    <Compile Include="Abstractions\IGeoJsonParser.cs" />
+    <Compile Include="Abstractions\IReverseLookup.cs" />
+    <Compile Include="Domain\ParsedGeoJson.cs" />
+    <Compile Include="Domain\Region.cs" />
     <Compile Include="ReverseLookup.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="GeoJsonParser.cs" />
+    <Compile Include="Services\GeoJsonParser.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="region-list.json" />

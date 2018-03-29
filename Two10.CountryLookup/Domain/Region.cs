@@ -1,4 +1,4 @@
-﻿namespace Two10.CountryLookup
+﻿namespace Two10.CountryLookup.Domain
 {
 
     public enum RegionType

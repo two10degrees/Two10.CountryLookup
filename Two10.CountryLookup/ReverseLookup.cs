@@ -1,22 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
+using Two10.CountryLookup.Abstractions;
+using Two10.CountryLookup.Domain;
 
 namespace Two10.CountryLookup
 {
-    public class ReverseLookup
+    public class ReverseLookup : IReverseLookup
     {
+        private readonly IFileLoader _fileLoader;
+        private readonly IGeoJsonParser _geoJsonParser;
 
         public Region[] Regions { get; private set; }
 
-        public ReverseLookup()
+        public ReverseLookup(IFileLoader fileLoader, IGeoJsonParser geoJsonParser)
         {
-            this.Regions = ParseInput(LoadFile()).ToArray();
+            _fileLoader = fileLoader;
+            _geoJsonParser = geoJsonParser;
+            this.Regions = ParseInput(_fileLoader.LoadFile()).ToArray();
         }
 
-        static bool InPolygon(float[] point, float[][] polygon)
+        private bool InPolygon(float[] point, float[][] polygon)
         {
             var nvert = polygon.Length;
             var c = false;
@@ -24,11 +27,14 @@ namespace Two10.CountryLookup
             var j = 0;
             for (i = 0, j = nvert - 1; i < nvert; j = i++)
             {
-                if (((polygon[i][1] > point[1]) != (polygon[j][1] > point[1])) && (point[0] < (polygon[j][0] - polygon[i][0]) * (point[1] - polygon[i][1]) / (polygon[j][1] - polygon[i][1]) + polygon[i][0]))
+                if (polygon[i][1] > point[1] != (polygon[j][1] > point[1]) &&
+                    point[0] < (polygon[j][0] - polygon[i][0]) * (point[1] - polygon[i][1]) /
+                    (polygon[j][1] - polygon[i][1]) + polygon[i][0])
                 {
                     c = !c;
                 }
             }
+
             return c;
         }
 
@@ -41,7 +47,7 @@ namespace Two10.CountryLookup
         /// <returns></returns>
         public Region Lookup(float lat, float lng, params RegionType[] types)
         {
-            var coords = new float[] { lng, lat };
+            var coords = new[] {lng, lat};
             var subset = this.Regions as IEnumerable<Region>;
 
             if (types.Any())
@@ -56,14 +62,15 @@ namespace Two10.CountryLookup
                     return country;
                 }
             }
+
             return null;
         }
 
-        static IEnumerable<Region> ParseInput(IEnumerable<string> geojson)
+        private IEnumerable<Region> ParseInput(IEnumerable<string> geojson)
         {
             foreach (var line in geojson)
             {
-                foreach (var polygon in GeoJsonParser.Convert(line))
+                foreach (var polygon in _geoJsonParser.Convert(line))
                 {
                     yield return new Region
                     {
@@ -75,21 +82,5 @@ namespace Two10.CountryLookup
                 }
             }
         }
-
-        static IEnumerable<string> LoadFile()
-        {
-            var assembly = Assembly.GetExecutingAssembly();
-            using (var stream = assembly.GetManifestResourceStream(assembly.GetManifestResourceNames().First()))
-            using (var reader = new StreamReader(stream))
-            {
-                string line = null;
-                while ((line = reader.ReadLine()) != null)
-                {
-                    yield return line;
-                }
-            }
-        }
-
-
     }
 }
