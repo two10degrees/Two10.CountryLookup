@@ -2,6 +2,7 @@
 using System.Linq;
 using Two10.CountryLookup.Abstractions;
 using Two10.CountryLookup.Domain;
+using Two10.CountryLookup.Services;
 
 namespace Two10.CountryLookup
 {
@@ -11,6 +12,11 @@ namespace Two10.CountryLookup
         private readonly IGeoJsonParser _geoJsonParser;
 
         public Region[] Regions { get; private set; }
+
+        public ReverseLookup() : this(new FileLoader(), new Services.GeoJsonParser())
+        {
+
+        }
 
         public ReverseLookup(IFileLoader fileLoader, IGeoJsonParser geoJsonParser)
         {
@@ -47,7 +53,7 @@ namespace Two10.CountryLookup
         /// <returns></returns>
         public Region Lookup(float lat, float lng, params RegionType[] types)
         {
-            var coords = new[] {lng, lat};
+            var coords = new[] { lng, lat };
             var subset = this.Regions as IEnumerable<Region>;
 
             if (types.Any())

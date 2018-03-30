@@ -11,9 +11,7 @@ namespace Two10.CountryLookup.Tests
 
         public CountryLookUpIntegrationTests()
         {
-            IFileLoader fileLoader = new FileLoader();
-            IGeoJsonParser geoJsonParser = new Services.GeoJsonParser();
-            _reverseLookup = new ReverseLookup(fileLoader, geoJsonParser);
+            _reverseLookup = new ReverseLookup();
         }
 
         [Fact]
