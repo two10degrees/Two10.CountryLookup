@@ -1,30 +1,25 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Two10.CountryLookup.Abstractions;
 
-namespace Two10.CountryLookup
+namespace Two10.CountryLookup.Services
 {
-    public static class GeoJsonParser
+    public partial class GeoJsonParser : IGeoJsonParser
     {
-        public class ParsedGeoJson
-        {
-            public string Id { get; set; }
-            public IDictionary<string, string> Properties { get; set; }
-            public float[][] Geometry { get; set; }
-        }
 
-        public static IEnumerable<ParsedGeoJson> Convert(string json)
+        public IEnumerable<Domain.GeoJsonParser.ParsedGeoJson> Convert(string json)
         {
             return Convert(JsonConvert.DeserializeObject<dynamic>(json));
         }
 
-        public static IEnumerable<ParsedGeoJson> Convert(dynamic json)
+        public IEnumerable<Domain.GeoJsonParser.ParsedGeoJson> Convert(dynamic json)
         {
             foreach (var coords in ToPoints(json.geometry))
             {
-                yield return new ParsedGeoJson
+                yield return new Domain.GeoJsonParser.ParsedGeoJson
                 {
                     Id = json.id,
                     Geometry = coords,
@@ -35,7 +30,7 @@ namespace Two10.CountryLookup
         }
 
 
-        static IEnumerable<float[][]> ToPoints(dynamic geometry)
+        private IEnumerable<float[][]> ToPoints(dynamic geometry)
         {
             if (null == geometry) yield break;
             switch ((string)geometry.type)
@@ -54,7 +49,7 @@ namespace Two10.CountryLookup
             }
         }
 
-        static IEnumerable<float[]> ParseCoordinates(dynamic coords)
+        private IEnumerable<float[]> ParseCoordinates(dynamic coords)
         {
             foreach (var coord in coords)
             {
